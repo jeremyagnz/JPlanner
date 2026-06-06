@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { type FormEvent, useState } from 'react'
 import './App.css'
 import {
   financeGoal,
@@ -9,6 +9,7 @@ import {
   visionBoard,
   weekCalendar,
 } from './data/mockData'
+import type { TaskItem } from './types'
 
 type View = 'Dashboard' | 'Planificación' | 'Ejecución' | 'Insights' | 'Vision'
 type Timeframe = keyof typeof productivityStats
@@ -27,9 +28,80 @@ function App() {
   const [activeView, setActiveView] = useState<View>('Dashboard')
   const [isDark, setIsDark] = useState(true)
   const [timeframe, setTimeframe] = useState<Timeframe>('Semana')
+  const [taskItems, setTaskItems] = useState<TaskItem[]>(tasks)
+  const [taskForm, setTaskForm] = useState({
+    title: '',
+    category: 'Tarea' as TaskItem['category'],
+    due: '',
+    priority: 'Media' as TaskItem['priority'],
+  })
+  const [editingTaskId, setEditingTaskId] = useState<string | null>(null)
 
-  const completedTasks = useMemo(() => tasks.filter((task) => task.done).length, [])
+  const completedTasks = taskItems.filter((task) => task.done).length
   const financeProgress = Math.round((financeGoal.current / financeGoal.target) * 100)
+
+  const resetTaskForm = () => {
+    setTaskForm({ title: '', category: 'Tarea', due: '', priority: 'Media' })
+    setEditingTaskId(null)
+  }
+
+  const handleTaskSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    const cleanTitle = taskForm.title.trim()
+    if (!cleanTitle) return
+
+    if (editingTaskId) {
+      setTaskItems((prev) =>
+        prev.map((task) =>
+          task.id === editingTaskId
+            ? {
+                ...task,
+                title: cleanTitle,
+                category: taskForm.category,
+                due: taskForm.due.trim() || 'Sin fecha',
+                priority: taskForm.priority,
+              }
+            : task,
+        ),
+      )
+      resetTaskForm()
+      return
+    }
+
+    setTaskItems((prev) => [
+      {
+        id: `t-${Date.now()}`,
+        title: cleanTitle,
+        category: taskForm.category,
+        due: taskForm.due.trim() || 'Sin fecha',
+        priority: taskForm.priority,
+        done: false,
+      },
+      ...prev,
+    ])
+    resetTaskForm()
+  }
+
+  const toggleTask = (taskId: string) => {
+    setTaskItems((prev) =>
+      prev.map((task) => (task.id === taskId ? { ...task, done: !task.done } : task)),
+    )
+  }
+
+  const removeTask = (taskId: string) => {
+    setTaskItems((prev) => prev.filter((task) => task.id !== taskId))
+    if (editingTaskId === taskId) resetTaskForm()
+  }
+
+  const editTask = (task: TaskItem) => {
+    setEditingTaskId(task.id)
+    setTaskForm({
+      title: task.title,
+      category: task.category,
+      due: task.due,
+      priority: task.priority,
+    })
+  }
 
   return (
     <div className={`momentum-app ${isDark ? 'theme-dark' : 'theme-light'}`}>
@@ -62,7 +134,9 @@ function App() {
           <section className="card stat-grid" aria-label="Resumen de rendimiento">
             <article>
               <p>Tareas completadas</p>
-              <strong>{completedTasks}/4</strong>
+              <strong>
+                {completedTasks}/{taskItems.length}
+              </strong>
             </article>
             <article>
               <p>Consistencia semanal</p>
@@ -105,17 +179,96 @@ function App() {
               <h2>Tareas, hábitos, proyectos y metas</h2>
               <span>Vista de ejecución diaria</span>
             </div>
+            <form className="task-form" onSubmit={handleTaskSubmit}>
+              <input
+                value={taskForm.title}
+                onChange={(event) =>
+                  setTaskForm((prev) => ({ ...prev, title: event.target.value }))
+                }
+                type="text"
+                placeholder="Agregar tarea del planner"
+                aria-label="Título de tarea"
+              />
+              <input
+                value={taskForm.due}
+                onChange={(event) =>
+                  setTaskForm((prev) => ({ ...prev, due: event.target.value }))
+                }
+                type="text"
+                placeholder="Fecha u hora objetivo"
+                aria-label="Fecha de tarea"
+              />
+              <select
+                value={taskForm.category}
+                onChange={(event) =>
+                  setTaskForm((prev) => ({
+                    ...prev,
+                    category: event.target.value as TaskItem['category'],
+                  }))
+                }
+                aria-label="Categoría de tarea"
+              >
+                <option value="Tarea">Tarea</option>
+                <option value="Hábito">Hábito</option>
+                <option value="Proyecto">Proyecto</option>
+                <option value="Meta">Meta</option>
+              </select>
+              <select
+                value={taskForm.priority}
+                onChange={(event) =>
+                  setTaskForm((prev) => ({
+                    ...prev,
+                    priority: event.target.value as TaskItem['priority'],
+                  }))
+                }
+                aria-label="Prioridad de tarea"
+              >
+                <option value="Alta">Alta</option>
+                <option value="Media">Media</option>
+                <option value="Baja">Baja</option>
+              </select>
+              <button type="submit" className="primary-button">
+                {editingTaskId ? 'Guardar' : 'Agregar +'}
+              </button>
+              {editingTaskId && (
+                <button type="button" className="ghost-button" onClick={resetTaskForm}>
+                  Cancelar
+                </button>
+              )}
+            </form>
             <div className="task-list">
-              {tasks.map((task) => (
-                <article key={task.id} className="task-item">
-                  <div>
+              {taskItems.map((task) => (
+                <article key={task.id} className={`task-item ${task.done ? 'is-done' : ''}`}>
+                  <label className="task-check">
+                    <input
+                      type="checkbox"
+                      checked={task.done}
+                      onChange={() => toggleTask(task.id)}
+                      aria-label={`Marcar ${task.title}`}
+                    />
+                  </label>
+                  <div className="task-content">
                     <p className="task-meta">
                       {task.category} · {task.priority}
                     </p>
                     <h3>{task.title}</h3>
                     <p>{task.due}</p>
                   </div>
-                  <span className={`pill ${task.done ? 'done' : 'pending'}`}>{task.done ? 'Hecho' : 'Pendiente'}</span>
+                  <div className="task-actions">
+                    <span className={`pill ${task.done ? 'done' : 'pending'}`}>
+                      {task.done ? 'Hecho' : 'Pendiente'}
+                    </span>
+                    <button type="button" className="task-action" onClick={() => editTask(task)}>
+                      Editar
+                    </button>
+                    <button
+                      type="button"
+                      className="task-action danger"
+                      onClick={() => removeTask(task.id)}
+                    >
+                      Eliminar
+                    </button>
+                  </div>
                 </article>
               ))}
             </div>
