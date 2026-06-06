@@ -26,6 +26,7 @@ const counters = {
 };
 
 const statuses = ['todo', 'doing', 'done'];
+const CARD_DESC_MAX_LENGTH = 90;
 
 const state = {
   tasks: [
@@ -153,7 +154,7 @@ const createTaskCard = (task) => {
         const p = document.createElement('p');
         p.className = 'meta';
         p.style.cssText = 'font-size:0.74rem;line-height:1.55;margin-top:0.18rem;opacity:0.72;';
-        p.textContent = task.desc.length > 90 ? task.desc.slice(0, 90) + '…' : task.desc;
+        p.textContent = task.desc.length > CARD_DESC_MAX_LENGTH ? task.desc.slice(0, CARD_DESC_MAX_LENGTH) + '…' : task.desc;
         return p;
       })()
     : null;
