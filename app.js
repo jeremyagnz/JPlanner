@@ -93,7 +93,7 @@ const state = {
 
 const reviewStoreKey = 'jplanner-weekly-review';
 const visionStoreKey = 'jplanner-vision-board';
-const WEEKS_PER_MONTH = 4.33;
+const AVERAGE_WEEKS_PER_MONTH = 4.33;
 const CANVAS_FONT_STACK = '12px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
 
 init();
@@ -603,8 +603,9 @@ function getWeeklyCompletion() {
 
 function generateSmartSuggestions(title, target, current) {
   const pending = target - current;
-  const monthly = Math.round(pending / 6);
-  const weekly = Math.round(monthly / WEEKS_PER_MONTH);
+  const monthsRemaining = Math.max(1, monthsUntilDeadline(model.yearlyGoal.deadline));
+  const monthly = Math.round(pending / monthsRemaining);
+  const weekly = Math.round(monthly / AVERAGE_WEEKS_PER_MONTH);
   return [
     `Crear bloque fijo semanal para ${title.toLowerCase()}.`,
     `Dividir el faltante de $${pending.toLocaleString()} en metas mensuales de $${monthly.toLocaleString()}.`,
@@ -691,6 +692,14 @@ function escapeHtml(text) {
 
 function getTodayDate() {
   return new Date().toISOString().slice(0, 10);
+}
+
+function monthsUntilDeadline(deadline) {
+  const today = new Date();
+  const limit = new Date(deadline);
+  const yearsDiff = limit.getFullYear() - today.getFullYear();
+  const monthsDiff = limit.getMonth() - today.getMonth();
+  return yearsDiff * 12 + monthsDiff + 1;
 }
 
 attachTaskCheckboxEvents();
