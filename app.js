@@ -26,7 +26,7 @@ const model = {
     label: 'Q3 2026',
     objective: 'Ahorrar $25,000',
     keyResults: [
-      { label: 'Alcanzar $10,000 en agosto', target: 10000, current: 10000 },
+      { label: 'Alcanzar $10,000 en agosto', target: 10000, current: 8000 },
       { label: 'Alcanzar $18,000 en octubre', target: 18000, current: 13000 },
       { label: 'Alcanzar $25,000 en diciembre', target: 25000, current: 11250 }
     ],
@@ -93,6 +93,9 @@ const state = {
 
 const reviewStoreKey = 'jplanner-weekly-review';
 const visionStoreKey = 'jplanner-vision-board';
+const WEEKS_PER_YEAR = 52;
+const DAYS_PER_YEAR = 365;
+// 52 semanas / 12 meses.
 const AVERAGE_WEEKS_PER_MONTH = 4.33;
 const CANVAS_FONT_STACK = '12px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
 
@@ -371,9 +374,10 @@ function renderQuarterly() {
 
 function renderYearly() {
   const yearProgress = Math.round((model.yearlyGoal.current / model.yearlyGoal.target) * 100);
+  const yearlyLabel = new Date(model.yearlyGoal.deadline).getFullYear();
 
   document.getElementById('yearly').innerHTML = `
-    <h2>Planificador Anual · 2026</h2>
+    <h2>Planificador Anual · ${yearlyLabel}</h2>
     <div class="grid">
       <div class="card">
         <h3>Metas anuales</h3>
@@ -577,8 +581,8 @@ function getGoalBreakdown(target, current) {
   return {
     annual: target,
     monthly: Math.round(target / 12),
-    weekly: Math.round(target / 52),
-    daily: Math.round(target / 365),
+    weekly: Math.round(target / WEEKS_PER_YEAR),
+    daily: Math.round(target / DAYS_PER_YEAR),
     remaining: Math.max(0, target - current)
   };
 }
