@@ -4,6 +4,7 @@ const ownerInput = document.getElementById('taskOwner');
 const dueInput = document.getElementById('taskDue');
 const priorityInput = document.getElementById('taskPriority');
 const focusTopButton = document.getElementById('newTaskTop');
+const formFeedback = document.getElementById('formFeedback');
 
 const lists = {
   todo: document.getElementById('todoList'),
@@ -53,8 +54,13 @@ const state = {
 };
 
 const formatDate = (isoDate) => {
-  const date = new Date(`${isoDate}T00:00:00`);
-  return Number.isNaN(date.getTime()) ? 'Sin fecha' : date.toLocaleDateString('es-ES');
+  const [year, month, day] = isoDate.split('-').map(Number);
+  if (!year || !month || !day) {
+    return 'Sin fecha';
+  }
+
+  const date = new Date(Date.UTC(year, month - 1, day));
+  return date.toLocaleDateString('es-ES', { timeZone: 'UTC' });
 };
 
 const clearNode = (node) => {
@@ -170,7 +176,14 @@ if (taskForm) {
     const priority = priorityInput.value;
 
     if (!title || !owner || !due || !priority) {
+      if (formFeedback) {
+        formFeedback.textContent = 'Completa todos los campos para crear la tarea.';
+      }
       return;
+    }
+
+    if (formFeedback) {
+      formFeedback.textContent = '';
     }
 
     state.tasks.unshift({
