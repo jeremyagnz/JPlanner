@@ -165,7 +165,7 @@ function renderDaily() {
   const progress = getDailyCompletion();
 
   document.getElementById('daily').innerHTML = `
-    <h2>Daily Planner · ${model.day.date}</h2>
+    <h2>Planificador Diario · ${model.day.date}</h2>
     <div class="card focus-only">
       <h3>Focus Mode</h3>
       <p>Solo objetivos, tareas y progreso actual.</p>
@@ -274,7 +274,7 @@ function renderWeekly() {
   const weekCompletion = getWeeklyCompletion();
 
   document.getElementById('weekly').innerHTML = `
-    <h2>Weekly Planner</h2>
+    <h2>Planificador Semanal</h2>
     <div class="grid">
       <div class="card">
         <h3>Objetivos de la semana</h3>
@@ -316,7 +316,7 @@ function renderMonthly() {
   const comparedText = compared >= 0 ? `+${compared}% vs mes anterior` : `${compared}% vs mes anterior`;
 
   document.getElementById('monthly').innerHTML = `
-    <h2>Monthly Planner · ${model.monthly.month}</h2>
+    <h2>Planificador Mensual · ${model.monthly.month}</h2>
     <div class="grid">
       <div class="card">
         <h3>Calendario del mes</h3>
@@ -343,7 +343,7 @@ function renderMonthly() {
 
 function renderQuarterly() {
   document.getElementById('quarterly').innerHTML = `
-    <h2>Quarterly Planner · ${model.quarter.label}</h2>
+    <h2>Planificador Trimestral · ${model.quarter.label}</h2>
     <div class="grid">
       <div class="card">
         <h3>Objetivo trimestral</h3>
@@ -370,7 +370,7 @@ function renderYearly() {
   const yearProgress = Math.round((model.yearlyGoal.current / model.yearlyGoal.target) * 100);
 
   document.getElementById('yearly').innerHTML = `
-    <h2>Yearly Planner · 2026</h2>
+    <h2>Planificador Anual · 2026</h2>
     <div class="grid">
       <div class="card">
         <h3>Metas anuales</h3>
@@ -394,7 +394,7 @@ function renderBreakdown() {
   const calculations = getGoalBreakdown(model.yearlyGoal.target, model.yearlyGoal.current);
 
   document.getElementById('breakdown').innerHTML = `
-    <h2>Goal Breakdown System</h2>
+    <h2>Sistema de Desglose de Metas</h2>
     <div class="grid">
       <div class="card">
         <h3>Meta principal</h3>
@@ -432,7 +432,7 @@ function renderBreakdownBars(calculations) {
 
 function renderLife() {
   document.getElementById('life').innerHTML = `
-    <h2>Life Dashboard</h2>
+    <h2>Dashboard de Vida</h2>
     <div class="grid">
       <div class="card">
         <h3>Balance general (Radar)</h3>
@@ -452,7 +452,7 @@ function renderLife() {
 
 function renderVision() {
   document.getElementById('vision').innerHTML = `
-    <h2>Vision Board</h2>
+    <h2>Tablero de Visión</h2>
     <div class="grid">
       <div class="card">
         <h3>Agregar imagen</h3>
@@ -508,7 +508,7 @@ function renderSmart() {
   model.smartSuggestions = generateSmartSuggestions(goalTitle, model.yearlyGoal.target, model.yearlyGoal.current);
 
   document.getElementById('smart').innerHTML = `
-    <h2>Smart Planning</h2>
+    <h2>Planificación Inteligente</h2>
     <div class="grid">
       <div class="card">
         <h3>Sugerencias automáticas para: ${goalTitle}</h3>
@@ -546,7 +546,7 @@ function renderKpis() {
 
 function renderHierarchy() {
   document.getElementById('hierarchy').innerHTML = `
-    <h2>Planning Hierarchy</h2>
+    <h2>Jerarquía de Planificación</h2>
     <div class="card">
       <p><strong>Year Goal:</strong> ${model.yearlyGoal.title}</p>
       <p>↓</p>
@@ -581,10 +581,16 @@ function getGoalBreakdown(target, current) {
 }
 
 function getDailyCompletion() {
+  if (model.day.tasks.length === 0) {
+    return 0;
+  }
   return Math.round((model.day.tasks.filter((task) => task.done).length / model.day.tasks.length) * 100);
 }
 
 function getWeeklyCompletion() {
+  if (model.day.tasks.length === 0) {
+    return 0;
+  }
   const totalUnits = model.weekly.goals.length + model.day.tasks.length;
   const completedTaskUnits = model.day.tasks.filter((task) => task.done).length;
   const completedGoalUnits = Math.round((completedTaskUnits / model.day.tasks.length) * model.weekly.goals.length);
