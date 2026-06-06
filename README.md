@@ -1,38 +1,61 @@
-# JPlanner
+# Momentum (JPlanner)
 
-JPlanner es una aplicación de planificación diseñada para ayudarte a organizar tareas, proyectos y objetivos de manera eficiente.
+Momentum es una base **mobile-first** de productividad premium, diseñada para evolucionar hacia apps móvil, web y futuras expansiones.
 
-## Características
+## Qué incluye esta versión
 
-- Gestión de tareas y proyectos
-- Organización por prioridades
-- Seguimiento del progreso
-- Interfaz intuitiva y fácil de usar
+- Dashboard principal con métricas de productividad
+- Planificación jerárquica: **Año → Trimestre → Mes → Semana → Día**
+- Gestión de tareas, hábitos, proyectos y metas
+- Objetivo financiero con progreso y fecha meta (ejemplo: **$25,000**)
+- Estadísticas visuales interactivas por semana, mes y trimestre
+- Timeline de progreso con evidencias visuales
+- Modo enfoque
+- Vision board
+- Dark/Light mode con diseño responsive priorizando móvil
 
-## Requisitos previos
+## Stack
 
-- Asegúrate de tener instaladas las herramientas necesarias antes de comenzar.
+- React 19 + TypeScript
+- Vite
+- CSS modular por capas (tokens + componentes + layout)
+- Datos mock tipados para demo funcional sin backend
 
-## Instalación
+## Arquitectura base
 
-1. Clona el repositorio:
-   ```bash
-   git clone https://github.com/jeremyagnz/JPlanner.git
-   ```
-2. Entra al directorio del proyecto:
-   ```bash
-   cd JPlanner
-   ```
-3. Instala las dependencias según corresponda al stack tecnológico del proyecto.
+```text
+src/
+  App.tsx               # Shell principal + navegación + secciones clave
+  App.css               # Sistema visual mobile-first y componentes UI
+  data/mockData.ts      # Datos de ejemplo realistas
+  types.ts              # Tipos de dominio (planificación, tareas, finanzas, etc.)
+```
 
-## Uso
+Esta estructura facilita integraciones posteriores con:
 
-Consulta la documentación o las instrucciones específicas una vez que el proyecto esté en desarrollo.
+- autenticación
+- backend/base de datos
+- sincronización en tiempo real
+- almacenamiento de imágenes
+- analítica e inteligencia/recomendaciones
 
-## Contribuciones
+## Desarrollo
 
-¡Las contribuciones son bienvenidas! Si deseas colaborar, por favor abre un issue o envía un pull request.
+```bash
+npm install
+npm run dev
+```
 
-## Licencia
+## Verificación
 
-Este proyecto está bajo la licencia que se definirá próximamente.
+```bash
+npm run lint
+npm run build
+```
+
+## Próximos pasos sugeridos
+
+1. Persistencia de datos y auth.
+2. Feed/timeline con subida de imágenes reales.
+3. Módulo de recomendaciones inteligentes y coach de productividad.
+4. Sincronización en tiempo real y soporte multi-dispositivo.
