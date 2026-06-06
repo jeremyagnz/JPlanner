@@ -1,14 +1,14 @@
 const tabs = [
-  { id: 'daily', label: 'Daily' },
-  { id: 'weekly', label: 'Weekly' },
-  { id: 'monthly', label: 'Monthly' },
-  { id: 'quarterly', label: 'Quarterly' },
-  { id: 'yearly', label: 'Yearly' },
-  { id: 'breakdown', label: 'Goal Breakdown' },
-  { id: 'life', label: 'Life Dashboard' },
+  { id: 'daily', label: 'Diario' },
+  { id: 'weekly', label: 'Semanal' },
+  { id: 'monthly', label: 'Mensual' },
+  { id: 'quarterly', label: 'Trimestral' },
+  { id: 'yearly', label: 'Anual' },
+  { id: 'breakdown', label: 'Desglose de Metas' },
+  { id: 'life', label: 'Dashboard de Vida' },
   { id: 'vision', label: 'Vision Board' },
-  { id: 'smart', label: 'Smart Planning' },
-  { id: 'hierarchy', label: 'Hierarchy' }
+  { id: 'smart', label: 'Planificación Inteligente' },
+  { id: 'hierarchy', label: 'Jerarquía' }
 ];
 
 const model = {
@@ -162,8 +162,7 @@ function renderAll() {
 }
 
 function renderDaily() {
-  const doneCount = model.day.tasks.filter((task) => task.done).length;
-  const progress = Math.round((doneCount / model.day.tasks.length) * 100);
+  const progress = getDailyCompletion();
 
   document.getElementById('daily').innerHTML = `
     <h2>Daily Planner · ${model.day.date}</h2>
@@ -272,8 +271,7 @@ function attachTaskCheckboxEvents() {
 }
 
 function renderWeekly() {
-  const doneTasks = model.day.tasks.filter((task) => task.done).length;
-  const weekCompletion = Math.min(100, Math.round((doneTasks / (model.day.tasks.length + model.weekly.goals.length)) * 100) * 2);
+  const weekCompletion = getWeeklyCompletion();
 
   document.getElementById('weekly').innerHTML = `
     <h2>Weekly Planner</h2>
@@ -293,9 +291,12 @@ function renderWeekly() {
       </div>
       <div class="card">
         <h3>Weekly Review</h3>
-        <label>¿Qué logré?<textarea id="reviewAchieved">${escapeHtml(model.weekly.review.achieved)}</textarea></label>
-        <label>¿Qué quedó pendiente?<textarea id="reviewPending">${escapeHtml(model.weekly.review.pending)}</textarea></label>
-        <label>¿Qué mejoraré la próxima semana?<textarea id="reviewImprove">${escapeHtml(model.weekly.review.improve)}</textarea></label>
+        <label for="reviewAchieved">¿Qué logré?</label>
+        <textarea id="reviewAchieved">${escapeHtml(model.weekly.review.achieved)}</textarea>
+        <label for="reviewPending">¿Qué quedó pendiente?</label>
+        <textarea id="reviewPending">${escapeHtml(model.weekly.review.pending)}</textarea>
+        <label for="reviewImprove">¿Qué mejoraré la próxima semana?</label>
+        <textarea id="reviewImprove">${escapeHtml(model.weekly.review.improve)}</textarea>
         <button class="btn" id="saveReview">Guardar review</button>
       </div>
     </div>
@@ -455,9 +456,12 @@ function renderVision() {
     <div class="grid">
       <div class="card">
         <h3>Agregar imagen</h3>
-        <label>Imagen<input type="file" id="visionImage" accept="image/*"></label>
-        <label>Objetivo asociado<input type="text" id="visionGoal" placeholder="Ej. Ahorrar $25,000"></label>
-        <label>Tarea relacionada<input type="text" id="visionTask" placeholder="Ej. Depositar $70 diario"></label>
+        <label for="visionImage">Imagen</label>
+        <input type="file" id="visionImage" accept="image/*">
+        <label for="visionGoal">Objetivo asociado</label>
+        <input type="text" id="visionGoal" placeholder="Ej. Ahorrar $25,000">
+        <label for="visionTask">Tarea relacionada</label>
+        <input type="text" id="visionTask" placeholder="Ej. Depositar $70 diario">
         <button class="btn" id="addVisionItem">Agregar a tablero</button>
       </div>
       <div class="card">
@@ -525,8 +529,8 @@ function renderSmart() {
 }
 
 function renderKpis() {
-  const dailyDone = Math.round((model.day.tasks.filter((t) => t.done).length / model.day.tasks.length) * 100);
-  const weekly = Math.min(100, dailyDone + 20);
+  const dailyDone = getDailyCompletion();
+  const weekly = getWeeklyCompletion();
   const monthly = model.monthly.currentCompletion;
   const quarterly = quarterProgress();
   const yearly = Math.round((model.yearlyGoal.current / model.yearlyGoal.target) * 100);
@@ -574,6 +578,17 @@ function getGoalBreakdown(target, current) {
     daily: Math.round(target / 365),
     remaining: Math.max(0, target - current)
   };
+}
+
+function getDailyCompletion() {
+  return Math.round((model.day.tasks.filter((task) => task.done).length / model.day.tasks.length) * 100);
+}
+
+function getWeeklyCompletion() {
+  const totalUnits = model.weekly.goals.length + model.day.tasks.length;
+  const completedTaskUnits = model.day.tasks.filter((task) => task.done).length;
+  const completedGoalUnits = Math.round((completedTaskUnits / model.day.tasks.length) * model.weekly.goals.length);
+  return Math.round(((completedTaskUnits + completedGoalUnits) / totalUnits) * 100);
 }
 
 function generateSmartSuggestions(title, target, current) {

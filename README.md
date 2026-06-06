@@ -1,38 +1,33 @@
 # JPlanner
 
-JPlanner es una aplicación de planificación diseñada para ayudarte a organizar tareas, proyectos y objetivos de manera eficiente.
+JPlanner es un sistema de planificación personal con horizonte diario, semanal, mensual, trimestral y anual.
 
-## Características
+## Funcionalidades incluidas
 
-- Gestión de tareas y proyectos
-- Organización por prioridades
-- Seguimiento del progreso
-- Interfaz intuitiva y fácil de usar
+- **Daily Planner** con agenda, tareas, eventos, objetivos, prioridades, hábitos y recordatorios.
+- **Drag & Drop** para reorganizar tareas diarias.
+- **Weekly Planner** con objetivos, tareas por día, tiempo estimado, progreso y Weekly Review.
+- **Monthly Planner** con calendario del mes, metas, hitos, eventos y comparativa con mes anterior.
+- **Quarterly Planner** con estructura OKR (objetivo + key results).
+- **Yearly Planner** con metas anuales, roadmap, logros y progreso visual.
+- **Goal Breakdown** automático (anual, mensual, semanal, diario) con brecha restante.
+- **Planning Hierarchy** conectando Year → Quarter → Month → Week → Daily Tasks.
+- **Focus Mode** para ver solo objetivos, tareas y progreso del día.
+- **Life Dashboard** con radar chart para áreas de vida.
+- **Vision Board** con carga de imágenes y asociación a objetivos/tareas.
+- **Smart Planning** con sugerencias automáticas de tareas, hitos y metas intermedias.
 
-## Requisitos previos
+## Ejecución local
 
-- Asegúrate de tener instaladas las herramientas necesarias antes de comenzar.
+No requiere instalación de dependencias.
 
-## Instalación
+1. Abrir `index.html` en el navegador (desde la raíz del proyecto).
+2. Navegar entre las vistas desde las pestañas superiores.
+3. Activar/desactivar **Focus Mode** desde el botón en la parte superior.
 
-1. Clona el repositorio:
-   ```bash
-   git clone https://github.com/jeremyagnz/JPlanner.git
-   ```
-2. Entra al directorio del proyecto:
-   ```bash
-   cd JPlanner
-   ```
-3. Instala las dependencias según corresponda al stack tecnológico del proyecto.
+## Persistencia
 
-## Uso
+La aplicación guarda en `localStorage`:
 
-Consulta la documentación o las instrucciones específicas una vez que el proyecto esté en desarrollo.
-
-## Contribuciones
-
-¡Las contribuciones son bienvenidas! Si deseas colaborar, por favor abre un issue o envía un pull request.
-
-## Licencia
-
-Este proyecto está bajo la licencia que se definirá próximamente.
+- respuestas del Weekly Review
+- elementos del Vision Board
