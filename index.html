@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>JPlanner | Gestión de tareas</title>
+    <title>JPlanner | Sistema de manejo de tareas</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -14,130 +14,79 @@
   </head>
   <body>
     <header class="topbar">
-      <a class="brand" href="#">JPlanner</a>
-      <nav>
-        <a href="#producto">Producto</a>
-        <a href="#beneficios">Beneficios</a>
-        <a href="#precios">Precios</a>
-        <a href="#faq">FAQ</a>
-      </nav>
-      <button class="btn ghost">Iniciar sesión</button>
+      <div>
+        <p class="eyebrow">JPlanner Workspace</p>
+        <h1>Sistema de manejo de tareas</h1>
+      </div>
+      <button class="btn primary" type="button" id="newTaskTop">Nueva tarea</button>
     </header>
 
-    <main>
-      <section class="hero">
-        <div class="hero-content">
-          <p class="badge">Software de gestión de tareas</p>
-          <h1>Gestiona tareas y proyectos en un solo lugar</h1>
-          <p>
-            Planifica, asigna y automatiza tu trabajo con una interfaz visual
-            inspirada en las mejores plataformas de productividad.
-          </p>
-          <div class="cta-form">
-            <input type="email" placeholder="Ingresa tu correo" aria-label="Correo" />
-            <button class="btn primary" type="button">Empieza gratis</button>
-          </div>
-          <small>Sin tarjeta de crédito · Configuración en minutos</small>
-        </div>
+    <main class="layout">
+      <aside class="panel">
+        <h2>Crear tarea</h2>
+        <form id="taskForm" class="task-form">
+          <label>
+            Nombre
+            <input id="taskTitle" name="title" type="text" required maxlength="80" />
+          </label>
 
-        <div class="hero-board" id="producto">
-          <div class="board-head">
-            <span>Tablero de lanzamiento</span>
-            <span class="dot"></span>
-          </div>
-          <div class="board-grid">
-            <article>
-              <h3>Pendiente</h3>
-              <ul>
-                <li>Definir objetivos Q3</li>
-                <li>Diseñar roadmap</li>
-                <li>Preparar campaña</li>
-              </ul>
-            </article>
-            <article>
-              <h3>En progreso</h3>
-              <ul>
-                <li>Integración CRM</li>
-                <li>Testing automatizado</li>
-                <li>Dashboard financiero</li>
-              </ul>
-            </article>
-            <article>
-              <h3>Completado</h3>
-              <ul>
-                <li>Kickoff del equipo</li>
-                <li>Estructura de tareas</li>
-                <li>Flujos de aprobación</li>
-              </ul>
-            </article>
-          </div>
-        </div>
-      </section>
+          <label>
+            Responsable
+            <input id="taskOwner" name="owner" type="text" required maxlength="40" />
+          </label>
 
-      <section class="logos">
-        <p>Equipos de alto rendimiento confían en herramientas como JPlanner</p>
-        <div>
-          <span>NovaTech</span>
-          <span>BlueStack</span>
-          <span>Raven Studio</span>
-          <span>CloudSphere</span>
-          <span>Solvex</span>
-        </div>
-      </section>
+          <label>
+            Fecha
+            <input id="taskDue" name="due" type="date" required />
+          </label>
 
-      <section class="features" id="beneficios">
-        <article>
-          <h2>Vista completa del trabajo</h2>
-          <p>Centraliza tareas, responsables, fechas y estados en tableros claros.</p>
+          <label>
+            Prioridad
+            <select id="taskPriority" name="priority" required>
+              <option value="Alta">Alta</option>
+              <option value="Media">Media</option>
+              <option value="Baja">Baja</option>
+            </select>
+          </label>
+
+          <button class="btn primary" type="submit">Agregar tarea</button>
+        </form>
+
+        <section class="summary" aria-live="polite">
+          <h3>Resumen</h3>
+          <p>Total: <strong id="totalCount">0</strong></p>
+          <p>Pendiente: <strong id="todoCount">0</strong></p>
+          <p>En progreso: <strong id="doingCount">0</strong></p>
+          <p>Completado: <strong id="doneCount">0</strong></p>
+        </section>
+      </aside>
+
+      <section class="board" aria-label="Tablero de tareas">
+        <article class="column" data-status="todo">
+          <header>
+            <h2>Pendiente</h2>
+            <span id="todoBadge" class="badge">0</span>
+          </header>
+          <div id="todoList" class="task-list"></div>
         </article>
-        <article>
-          <h2>Automatizaciones inteligentes</h2>
-          <p>Reduce tareas repetitivas con reglas de actualización y recordatorios.</p>
+
+        <article class="column" data-status="doing">
+          <header>
+            <h2>En progreso</h2>
+            <span id="doingBadge" class="badge">0</span>
+          </header>
+          <div id="doingList" class="task-list"></div>
         </article>
-        <article>
-          <h2>Colaboración en tiempo real</h2>
-          <p>Comenta, etiqueta y comparte avances con todo tu equipo sin fricción.</p>
+
+        <article class="column" data-status="done">
+          <header>
+            <h2>Completado</h2>
+            <span id="doneBadge" class="badge">0</span>
+          </header>
+          <div id="doneList" class="task-list"></div>
         </article>
-      </section>
-
-      <section class="demo">
-        <div>
-          <h2>Control visual del progreso</h2>
-          <p>Actualiza estados con un clic y obtén una lectura inmediata del avance.</p>
-        </div>
-        <div class="progress-list" id="progress-list"></div>
-      </section>
-
-      <section class="pricing" id="precios">
-        <h2>Empieza hoy tu gestión de tareas</h2>
-        <div class="pricing-card">
-          <p>Plan Pro</p>
-          <h3>€9 / usuario</h3>
-          <ul>
-            <li>Tableros ilimitados</li>
-            <li>Automatizaciones avanzadas</li>
-            <li>Reportes y analítica</li>
-          </ul>
-          <button class="btn primary">Probar gratis</button>
-        </div>
-      </section>
-
-      <section class="faq" id="faq">
-        <h2>Preguntas frecuentes</h2>
-        <details>
-          <summary>¿Puedo usarlo con mi equipo actual?</summary>
-          <p>Sí, puedes invitar miembros y asignar permisos por proyecto.</p>
-        </details>
-        <details>
-          <summary>¿Tiene plantillas listas para usar?</summary>
-          <p>Incluye plantillas para marketing, operaciones, ventas y producto.</p>
-        </details>
       </section>
     </main>
-
-    <footer>
-      <p>© 2026 JPlanner · Gestión de tareas para equipos modernos</p>
-    </footer>
 
     <script src="/script.js"></script>
   </body>
