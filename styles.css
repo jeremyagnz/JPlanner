@@ -1,0 +1,227 @@
+:root {
+  color-scheme: light;
+  --bg: #f5f7fb;
+  --surface: #ffffff;
+  --line: #dbe2ee;
+  --text: #1b263b;
+  --muted: #61708a;
+  --accent: #2563eb;
+  --ok: #16a34a;
+  --warn: #f59e0b;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.topbar {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--line);
+  background: var(--surface);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+}
+
+.topbar h1 {
+  margin: 0;
+}
+
+.topbar p {
+  margin: 0;
+  color: var(--muted);
+}
+
+.focus-btn {
+  margin-left: auto;
+  border: 0;
+  background: #111827;
+  color: white;
+  padding: 0.6rem 0.9rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.tabs {
+  padding: 0.75rem 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tabs button {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  padding: 0.45rem 0.8rem;
+  cursor: pointer;
+}
+
+.tabs .active {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+main {
+  padding: 1rem 1.5rem 2rem;
+}
+
+.view.hidden {
+  display: none;
+}
+
+.grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 0.9rem;
+}
+
+.card h3,
+.card h4 {
+  margin-top: 0;
+}
+
+.list {
+  margin: 0;
+  padding-left: 1rem;
+}
+
+.task-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.4rem;
+  padding: 0.4rem 0.5rem;
+  border: 1px dashed transparent;
+  border-radius: 6px;
+  background: #f8fafc;
+}
+
+.task-item.dragging {
+  opacity: 0.6;
+  border-color: var(--accent);
+}
+
+.progress-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+progress {
+  width: 100%;
+  height: 12px;
+}
+
+.calendar {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 0.35rem;
+}
+
+.calendar .day {
+  min-height: 72px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.3rem;
+  background: var(--surface);
+  font-size: 0.82rem;
+}
+
+.kpi {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.tag {
+  display: inline-block;
+  padding: 0.15rem 0.45rem;
+  border-radius: 999px;
+  background: #e0e7ff;
+  color: #3730a3;
+  font-size: 0.75rem;
+}
+
+.vision-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1rem;
+}
+
+.vision-item img {
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  max-height: 130px;
+  object-fit: cover;
+}
+
+textarea,
+input,
+button,
+select {
+  font: inherit;
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 0.45rem;
+}
+
+.btn {
+  border: 0;
+  border-radius: 8px;
+  padding: 0.45rem 0.8rem;
+  background: var(--accent);
+  color: white;
+  cursor: pointer;
+}
+
+small {
+  color: var(--muted);
+}
+
+.focus-only {
+  display: none;
+}
+
+.focus-enabled .tabs,
+.focus-enabled #weekly,
+.focus-enabled #monthly,
+.focus-enabled #quarterly,
+.focus-enabled #yearly,
+.focus-enabled #breakdown,
+.focus-enabled #life,
+.focus-enabled #vision,
+.focus-enabled #smart,
+.focus-enabled #hierarchy {
+  display: none !important;
+}
+
+.focus-enabled #daily {
+  display: block !important;
+}
+
+.focus-enabled .focus-only {
+  display: block;
+}
