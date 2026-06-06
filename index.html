@@ -32,24 +32,14 @@
           </svg>
           <span class="brand-name">JPlanner</span>
         </div>
-        <div class="nav-links">
-          <a href="#" class="nav-link">Producto</a>
-          <a href="#" class="nav-link">Precios</a>
-          <a href="#" class="nav-link">Docs</a>
-        </div>
         <div class="nav-actions">
-          <button class="btn ghost" type="button">Ver demo</button>
-          <button class="btn primary" type="button" id="newTaskTop">Nueva tarea</button>
+          <button class="btn primary" type="button" id="newTaskTop">+ Nueva tarea</button>
         </div>
       </div>
     </nav>
 
     <section class="hero">
       <div class="hero-inner">
-        <div class="hero-badge">
-          <span class="badge-dot" aria-hidden="true"></span>
-          JPlanner for Teams — Nueva versión Pro disponible
-        </div>
         <h1>Gestiona tareas<br /><span class="gradient-text">como un pro</span></h1>
         <p class="subtitle">
           Organiza prioridades, asigna responsables y mantén<br />visibilidad total del progreso en tiempo real.
@@ -126,15 +116,24 @@
           </div>
 
           <div class="field">
-            <label for="taskPriority">Prioridad</label>
-            <div class="input-wrap">
-              <svg class="input-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>
-              <select id="taskPriority" name="priority" required>
-                <option value="Alta">Alta</option>
-                <option value="Media">Media</option>
-                <option value="Baja">Baja</option>
-              </select>
+            <label>Prioridad</label>
+            <div class="priority-picker" id="priorityPicker" role="group" aria-label="Prioridad de la tarea">
+              <button type="button" class="prio-btn active" data-value="Alta">
+                <span class="prio-dot prio-dot--alta" aria-hidden="true"></span> Alta
+              </button>
+              <button type="button" class="prio-btn" data-value="Media">
+                <span class="prio-dot prio-dot--media" aria-hidden="true"></span> Media
+              </button>
+              <button type="button" class="prio-btn" data-value="Baja">
+                <span class="prio-dot prio-dot--baja" aria-hidden="true"></span> Baja
+              </button>
             </div>
+            <input type="hidden" id="taskPriority" name="priority" value="Alta" />
+          </div>
+
+          <div class="field">
+            <label for="taskDesc">Descripción <span class="optional">opcional</span></label>
+            <textarea id="taskDesc" name="desc" maxlength="200" placeholder="Notas adicionales sobre la tarea..." rows="2"></textarea>
           </div>
 
           <button class="btn primary full" type="submit">
@@ -207,6 +206,28 @@
       </section>
     </main>
 
+    <div class="section-header">
+      <h2>Analíticas</h2>
+      <p class="section-sub">Distribución del tablero en tiempo real</p>
+    </div>
+    <section class="charts-section" aria-label="Gráficos de analíticas">
+      <div class="charts-inner">
+        <div class="chart-card">
+          <p class="chart-title">Estado de tareas</p>
+          <div class="chart-wrap">
+            <canvas id="statusChart"></canvas>
+          </div>
+        </div>
+        <div class="chart-card">
+          <p class="chart-title">Distribución por prioridad</p>
+          <div class="chart-wrap">
+            <canvas id="priorityChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
     <script src="/script.js"></script>
   </body>
 </html>

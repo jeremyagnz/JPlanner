@@ -2,7 +2,9 @@ const taskForm = document.getElementById('taskForm');
 const titleInput = document.getElementById('taskTitle');
 const ownerInput = document.getElementById('taskOwner');
 const dueInput = document.getElementById('taskDue');
-const priorityInput = document.getElementById('taskPriority');
+const priorityInput = document.getElementById('taskPriority'); // hidden input
+const descInput = document.getElementById('taskDesc');
+const priorityPicker = document.getElementById('priorityPicker');
 const focusTopButton = document.getElementById('newTaskTop');
 const formFeedback = document.getElementById('formFeedback');
 const kpiTotal = document.getElementById('totalCountKpi');
@@ -33,7 +35,8 @@ const state = {
       owner: 'Andrea',
       due: '2026-06-10',
       priority: 'Alta',
-      status: 'todo'
+      status: 'todo',
+      desc: 'Incluir pantallas de bienvenida y tutorial inicial.'
     },
     {
       id: crypto.randomUUID(),
@@ -41,7 +44,8 @@ const state = {
       owner: 'Miguel',
       due: '2026-06-12',
       priority: 'Media',
-      status: 'doing'
+      status: 'doing',
+      desc: ''
     },
     {
       id: crypto.randomUUID(),
@@ -49,7 +53,8 @@ const state = {
       owner: 'Luisa',
       due: '2026-06-05',
       priority: 'Baja',
-      status: 'done'
+      status: 'done',
+      desc: ''
     }
   ]
 };
@@ -82,6 +87,9 @@ const statusLabels = {
   done: 'Completado'
 };
 
+// drag state – declared early so createTaskCard can reference it
+let draggedId = null;
+
 const avatarPalette = [
   ['#7c3aed', '#3b82f6'],
   ['#db2777', '#7c3aed'],
@@ -110,6 +118,19 @@ const getInitials = (name) =>
 const createTaskCard = (task) => {
   const card = document.createElement('article');
   card.className = 'task-card';
+  card.draggable = true;
+
+  // Drag events
+  card.addEventListener('dragstart', (e) => {
+    draggedId = task.id;
+    e.dataTransfer.effectAllowed = 'move';
+    requestAnimationFrame(() => card.classList.add('dragging'));
+  });
+  card.addEventListener('dragend', () => {
+    card.classList.remove('dragging');
+    draggedId = null;
+    document.querySelectorAll('.task-list').forEach((l) => l.classList.remove('drag-over'));
+  });
 
   // Header: avatar + title
   const header = document.createElement('div');
@@ -125,6 +146,17 @@ const createTaskCard = (task) => {
   title.textContent = task.title;
 
   header.append(avatar, title);
+
+  // Optional description
+  const descEl = task.desc
+    ? (() => {
+        const p = document.createElement('p');
+        p.className = 'meta';
+        p.style.cssText = 'font-size:0.74rem;line-height:1.55;margin-top:0.18rem;opacity:0.72;';
+        p.textContent = task.desc.length > 90 ? task.desc.slice(0, 90) + '…' : task.desc;
+        return p;
+      })()
+    : null;
 
   // Meta info
   const meta = document.createElement('p');
@@ -166,7 +198,10 @@ const createTaskCard = (task) => {
   actions.append(moveButton, deleteButton);
   row.append(priority, actions);
 
-  card.append(header, meta, row);
+  const children = [header];
+  if (descEl) children.push(descEl);
+  children.push(meta, row);
+  card.append(...children);
 
   return card;
 };
@@ -212,8 +247,29 @@ const renderBoard = () => {
   renderColumn('doing');
   renderColumn('done');
   updateSummary();
+  updateCharts();
 };
 
+// ─── PRIORITY PICKER ───
+const resetPriorityPicker = () => {
+  if (!priorityPicker) return;
+  priorityPicker.querySelectorAll('.prio-btn').forEach((b) => b.classList.remove('active'));
+  const defaultBtn = priorityPicker.querySelector('[data-value="Alta"]');
+  if (defaultBtn) defaultBtn.classList.add('active');
+  if (priorityInput) priorityInput.value = 'Alta';
+};
+
+if (priorityPicker) {
+  priorityPicker.querySelectorAll('.prio-btn').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      priorityPicker.querySelectorAll('.prio-btn').forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+      if (priorityInput) priorityInput.value = btn.dataset.value;
+    });
+  });
+}
+
+// ─── FORM SUBMIT ───
 if (taskForm) {
   taskForm.addEventListener('submit', (event) => {
     event.preventDefault();
@@ -221,7 +277,8 @@ if (taskForm) {
     const title = titleInput.value.trim();
     const owner = ownerInput.value.trim();
     const due = dueInput.value;
-    const priority = priorityInput.value;
+    const priority = priorityInput ? priorityInput.value : 'Alta';
+    const desc = descInput ? descInput.value.trim() : '';
 
     if (!title || !owner || !due || !priority) {
       if (formFeedback) {
@@ -240,11 +297,12 @@ if (taskForm) {
       owner,
       due,
       priority,
+      desc,
       status: 'todo'
     });
 
     taskForm.reset();
-    priorityInput.value = 'Alta';
+    resetPriorityPicker();
     renderBoard();
     titleInput.focus();
   });
@@ -257,4 +315,152 @@ if (focusTopButton) {
   });
 }
 
+// ─── DRAG AND DROP ───
+const initDragAndDrop = () => {
+  Object.entries(lists).forEach(([status, list]) => {
+    list.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      e.dataTransfer.dropEffect = 'move';
+      list.classList.add('drag-over');
+    });
+
+    list.addEventListener('dragleave', (e) => {
+      if (!list.contains(e.relatedTarget)) {
+        list.classList.remove('drag-over');
+      }
+    });
+
+    list.addEventListener('drop', (e) => {
+      e.preventDefault();
+      list.classList.remove('drag-over');
+      if (!draggedId) return;
+      const task = state.tasks.find((t) => t.id === draggedId);
+      if (task && task.status !== status) {
+        task.status = status;
+        renderBoard();
+      }
+      draggedId = null;
+    });
+  });
+};
+
+initDragAndDrop();
+
+// ─── CHARTS ───
+let statusChartInst = null;
+let priorityChartInst = null;
+
+const initCharts = () => {
+  if (typeof Chart === 'undefined') return;
+
+  Chart.defaults.color = 'rgba(232, 236, 255, 0.48)';
+  Chart.defaults.borderColor = 'rgba(255, 255, 255, 0.06)';
+
+  const statusCtx = document.getElementById('statusChart');
+  const priorityCtx = document.getElementById('priorityChart');
+
+  if (statusCtx) {
+    statusChartInst = new Chart(statusCtx, {
+      type: 'doughnut',
+      data: {
+        labels: ['Pendiente', 'En progreso', 'Completado'],
+        datasets: [
+          {
+            data: [0, 0, 0],
+            backgroundColor: [
+              'rgba(96, 165, 250, 0.7)',
+              'rgba(245, 158, 11, 0.7)',
+              'rgba(52, 211, 153, 0.7)'
+            ],
+            borderColor: ['rgba(96, 165, 250, 1)', 'rgba(245, 158, 11, 1)', 'rgba(52, 211, 153, 1)'],
+            borderWidth: 1.5,
+            hoverOffset: 8
+          }
+        ]
+      },
+      options: {
+        maintainAspectRatio: false,
+        cutout: '70%',
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: {
+              color: 'rgba(232, 236, 255, 0.55)',
+              boxWidth: 11,
+              padding: 18,
+              font: { size: 12 }
+            }
+          }
+        },
+        animation: { duration: 500 }
+      }
+    });
+  }
+
+  if (priorityCtx) {
+    priorityChartInst = new Chart(priorityCtx, {
+      type: 'bar',
+      data: {
+        labels: ['Alta', 'Media', 'Baja'],
+        datasets: [
+          {
+            label: 'Tareas',
+            data: [0, 0, 0],
+            backgroundColor: [
+              'rgba(239, 68, 68, 0.45)',
+              'rgba(245, 158, 11, 0.45)',
+              'rgba(16, 185, 129, 0.45)'
+            ],
+            borderColor: [
+              'rgba(239, 68, 68, 0.9)',
+              'rgba(245, 158, 11, 0.9)',
+              'rgba(16, 185, 129, 0.9)'
+            ],
+            borderWidth: 1.5,
+            borderRadius: 8,
+            borderSkipped: false
+          }
+        ]
+      },
+      options: {
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: { color: 'rgba(232, 236, 255, 0.4)', stepSize: 1 },
+            grid: { color: 'rgba(255, 255, 255, 0.05)' }
+          },
+          x: {
+            ticks: { color: 'rgba(232, 236, 255, 0.55)', font: { weight: '600' } },
+            grid: { display: false }
+          }
+        },
+        animation: { duration: 500 }
+      }
+    });
+  }
+};
+
+const updateCharts = () => {
+  if (statusChartInst) {
+    statusChartInst.data.datasets[0].data = [
+      state.tasks.filter((t) => t.status === 'todo').length,
+      state.tasks.filter((t) => t.status === 'doing').length,
+      state.tasks.filter((t) => t.status === 'done').length
+    ];
+    statusChartInst.update();
+  }
+
+  if (priorityChartInst) {
+    priorityChartInst.data.datasets[0].data = [
+      state.tasks.filter((t) => t.priority === 'Alta').length,
+      state.tasks.filter((t) => t.priority === 'Media').length,
+      state.tasks.filter((t) => t.priority === 'Baja').length
+    ];
+    priorityChartInst.update();
+  }
+};
+
+initCharts();
 renderBoard();
