@@ -7,92 +7,177 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;0,14..32,800;1,14..32,400&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
-    <div class="announcement">Nueva versión Pro: tableros más rápidos, más claros y listos para escalar.</div>
+    <div class="bg-mesh" aria-hidden="true"></div>
 
-    <header class="topbar">
-      <div>
-        <p class="eyebrow">JPlanner for Teams</p>
-        <h1>Gestiona tareas como un servicio profesional</h1>
+    <nav class="nav">
+      <div class="nav-inner">
+        <div class="nav-brand">
+          <svg class="brand-icon" width="28" height="28" viewBox="0 0 28 28" fill="none" aria-hidden="true">
+            <rect x="2" y="2" width="10" height="10" rx="3" fill="url(#brandGrad)" />
+            <rect x="16" y="2" width="10" height="10" rx="3" fill="url(#brandGrad)" opacity="0.55" />
+            <rect x="2" y="16" width="10" height="10" rx="3" fill="url(#brandGrad)" opacity="0.38" />
+            <rect x="16" y="16" width="10" height="10" rx="3" fill="url(#brandGrad)" opacity="0.75" />
+            <defs>
+              <linearGradient id="brandGrad" x1="0" y1="0" x2="28" y2="28" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#a78bfa" />
+                <stop offset="1" stop-color="#60a5fa" />
+              </linearGradient>
+            </defs>
+          </svg>
+          <span class="brand-name">JPlanner</span>
+        </div>
+        <div class="nav-links">
+          <a href="#" class="nav-link">Producto</a>
+          <a href="#" class="nav-link">Precios</a>
+          <a href="#" class="nav-link">Docs</a>
+        </div>
+        <div class="nav-actions">
+          <button class="btn ghost" type="button">Ver demo</button>
+          <button class="btn primary" type="button" id="newTaskTop">Nueva tarea</button>
+        </div>
+      </div>
+    </nav>
+
+    <section class="hero">
+      <div class="hero-inner">
+        <div class="hero-badge">
+          <span class="badge-dot" aria-hidden="true"></span>
+          JPlanner for Teams — Nueva versión Pro disponible
+        </div>
+        <h1>Gestiona tareas<br /><span class="gradient-text">como un pro</span></h1>
         <p class="subtitle">
-          Organiza prioridades, asigna responsables y mantiene visibilidad total del progreso.
+          Organiza prioridades, asigna responsables y mantén<br />visibilidad total del progreso en tiempo real.
         </p>
       </div>
-      <div class="top-actions">
-        <button class="btn ghost" type="button">Ver demo</button>
-        <button class="btn primary" type="button" id="newTaskTop">Nueva tarea</button>
-      </div>
-    </header>
+    </section>
 
     <section class="kpi-strip" aria-label="Métricas del tablero">
-      <article>
-        <p>Tareas totales</p>
-        <strong id="totalCountKpi">0</strong>
+      <article class="kpi-card">
+        <div class="kpi-icon kpi-icon--blue" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M9 11l3 3L22 4" /><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" /></svg>
+        </div>
+        <div>
+          <p class="kpi-label">Tareas totales</p>
+          <strong class="kpi-value" id="totalCountKpi">0</strong>
+        </div>
+        <span class="kpi-trend kpi-trend--up">↑ activo</span>
       </article>
-      <article>
-        <p>Productividad semanal</p>
-        <strong>+18%</strong>
+      <article class="kpi-card">
+        <div class="kpi-icon kpi-icon--purple" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17" /><polyline points="16 7 22 7 22 13" /></svg>
+        </div>
+        <div>
+          <p class="kpi-label">Productividad semanal</p>
+          <strong class="kpi-value">+18%</strong>
+        </div>
+        <span class="kpi-trend kpi-trend--up">↑ vs sem. ant.</span>
       </article>
-      <article>
-        <p>Tiempo medio de cierre</p>
-        <strong>2.4 días</strong>
+      <article class="kpi-card">
+        <div class="kpi-icon kpi-icon--green" aria-hidden="true">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
+        </div>
+        <div>
+          <p class="kpi-label">Tiempo medio de cierre</p>
+          <strong class="kpi-value">2.4 días</strong>
+        </div>
+        <span class="kpi-trend kpi-trend--down">↓ optimizando</span>
       </article>
     </section>
 
     <main class="layout">
       <aside class="panel">
         <div class="panel-head">
-          <h2>Crear tarea</h2>
+          <div>
+            <h2>Nueva tarea</h2>
+            <p class="panel-sub">Añade al board al instante</p>
+          </div>
           <span class="panel-tag">Workflow</span>
         </div>
 
         <form id="taskForm" class="task-form">
-          <label>
-            Nombre
-            <input id="taskTitle" name="title" type="text" required maxlength="80" placeholder="Ej: Actualizar roadmap Q3" />
-          </label>
+          <div class="field">
+            <label for="taskTitle">Nombre</label>
+            <div class="input-wrap">
+              <svg class="input-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" /><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" /></svg>
+              <input id="taskTitle" name="title" type="text" required maxlength="80" placeholder="Ej: Actualizar roadmap Q3" />
+            </div>
+          </div>
 
-          <label>
-            Responsable
-            <input id="taskOwner" name="owner" type="text" required maxlength="40" placeholder="Ej: Carla" />
-          </label>
+          <div class="field">
+            <label for="taskOwner">Responsable</label>
+            <div class="input-wrap">
+              <svg class="input-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>
+              <input id="taskOwner" name="owner" type="text" required maxlength="40" placeholder="Ej: Carla" />
+            </div>
+          </div>
 
-          <label>
-            Fecha
-            <input id="taskDue" name="due" type="date" required />
-          </label>
+          <div class="field">
+            <label for="taskDue">Fecha límite</label>
+            <div class="input-wrap">
+              <svg class="input-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></svg>
+              <input id="taskDue" name="due" type="date" required />
+            </div>
+          </div>
 
-          <label>
-            Prioridad
-            <select id="taskPriority" name="priority" required>
-              <option value="Alta">Alta</option>
-              <option value="Media">Media</option>
-              <option value="Baja">Baja</option>
-            </select>
-          </label>
+          <div class="field">
+            <label for="taskPriority">Prioridad</label>
+            <div class="input-wrap">
+              <svg class="input-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>
+              <select id="taskPriority" name="priority" required>
+                <option value="Alta">Alta</option>
+                <option value="Media">Media</option>
+                <option value="Baja">Baja</option>
+              </select>
+            </div>
+          </div>
 
-          <button class="btn primary" type="submit">Agregar tarea</button>
+          <button class="btn primary full" type="submit">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></svg>
+            Agregar tarea
+          </button>
           <p id="formFeedback" class="feedback" aria-live="polite"></p>
         </form>
 
         <section class="summary" aria-live="polite">
           <h3>Resumen en tiempo real</h3>
-          <p>Total: <strong id="totalCount">0</strong></p>
-          <p>Pendiente: <strong id="todoCount">0</strong></p>
-          <p>En progreso: <strong id="doingCount">0</strong></p>
-          <p>Completado: <strong id="doneCount">0</strong></p>
+          <div class="summary-grid">
+            <div class="summary-item">
+              <span class="summary-dot summary-dot--blue" aria-hidden="true"></span>
+              <span class="summary-label">Total</span>
+              <strong id="totalCount">0</strong>
+            </div>
+            <div class="summary-item">
+              <span class="summary-dot summary-dot--gray" aria-hidden="true"></span>
+              <span class="summary-label">Pendiente</span>
+              <strong id="todoCount">0</strong>
+            </div>
+            <div class="summary-item">
+              <span class="summary-dot summary-dot--amber" aria-hidden="true"></span>
+              <span class="summary-label">En progreso</span>
+              <strong id="doingCount">0</strong>
+            </div>
+            <div class="summary-item">
+              <span class="summary-dot summary-dot--green" aria-hidden="true"></span>
+              <span class="summary-label">Completado</span>
+              <strong id="doneCount">0</strong>
+            </div>
+          </div>
         </section>
       </aside>
 
       <section class="board" aria-label="Tablero de tareas">
         <article class="column" data-status="todo">
           <header>
-            <h2>Pendiente</h2>
+            <div class="col-title">
+              <span class="col-dot col-dot--blue" aria-hidden="true"></span>
+              <h2>Pendiente</h2>
+            </div>
             <span id="todoBadge" class="badge">0</span>
           </header>
           <div id="todoList" class="task-list"></div>
@@ -100,7 +185,10 @@
 
         <article class="column" data-status="doing">
           <header>
-            <h2>En progreso</h2>
+            <div class="col-title">
+              <span class="col-dot col-dot--amber" aria-hidden="true"></span>
+              <h2>En progreso</h2>
+            </div>
             <span id="doingBadge" class="badge">0</span>
           </header>
           <div id="doingList" class="task-list"></div>
@@ -108,7 +196,10 @@
 
         <article class="column" data-status="done">
           <header>
-            <h2>Completado</h2>
+            <div class="col-title">
+              <span class="col-dot col-dot--green" aria-hidden="true"></span>
+              <h2>Completado</h2>
+            </div>
             <span id="doneBadge" class="badge">0</span>
           </header>
           <div id="doneList" class="task-list"></div>

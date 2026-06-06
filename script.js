@@ -82,21 +82,56 @@ const statusLabels = {
   done: 'Completado'
 };
 
+const avatarPalette = [
+  ['#7c3aed', '#3b82f6'],
+  ['#db2777', '#7c3aed'],
+  ['#059669', '#3b82f6'],
+  ['#d97706', '#db2777'],
+  ['#2563eb', '#059669']
+];
+
+const getAvatarColors = (name) => {
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = Math.imul(31, hash) + name.charCodeAt(i) | 0;
+  }
+  return avatarPalette[Math.abs(hash) % avatarPalette.length];
+};
+
+const getInitials = (name) =>
+  name
+    .trim()
+    .split(/\s+/)
+    .map((w) => w[0] || '')
+    .join('')
+    .toUpperCase()
+    .slice(0, 2);
+
 const createTaskCard = (task) => {
   const card = document.createElement('article');
   card.className = 'task-card';
 
+  // Header: avatar + title
+  const header = document.createElement('div');
+  header.className = 'card-header';
+
+  const avatar = document.createElement('div');
+  avatar.className = 'card-avatar';
+  avatar.textContent = getInitials(task.owner);
+  const [c1, c2] = getAvatarColors(task.owner);
+  avatar.style.background = `linear-gradient(135deg, ${c1}, ${c2})`;
+
   const title = document.createElement('h3');
   title.textContent = task.title;
 
-  const owner = document.createElement('p');
-  owner.className = 'meta';
-  owner.textContent = `Responsable: ${task.owner}`;
+  header.append(avatar, title);
 
-  const due = document.createElement('p');
-  due.className = 'meta';
-  due.textContent = `Fecha: ${formatDate(task.due)}`;
+  // Meta info
+  const meta = document.createElement('p');
+  meta.className = 'meta';
+  meta.textContent = `${task.owner}  ·  ${formatDate(task.due)}`;
 
+  // Bottom row: priority badge + actions
   const row = document.createElement('div');
   row.className = 'card-row';
 
@@ -112,7 +147,7 @@ const createTaskCard = (task) => {
   moveButton.className = 'btn secondary';
   moveButton.type = 'button';
   const next = nextStatus(task.status);
-  moveButton.textContent = `Mover a ${statusLabels[next]}`;
+  moveButton.textContent = `→ ${statusLabels[next]}`;
   moveButton.addEventListener('click', () => {
     task.status = nextStatus(task.status);
     renderBoard();
@@ -121,7 +156,8 @@ const createTaskCard = (task) => {
   const deleteButton = document.createElement('button');
   deleteButton.className = 'btn danger';
   deleteButton.type = 'button';
-  deleteButton.textContent = 'Eliminar';
+  deleteButton.textContent = '✕';
+  deleteButton.setAttribute('aria-label', 'Eliminar tarea');
   deleteButton.addEventListener('click', () => {
     state.tasks = state.tasks.filter((item) => item.id !== task.id);
     renderBoard();
@@ -130,7 +166,7 @@ const createTaskCard = (task) => {
   actions.append(moveButton, deleteButton);
   row.append(priority, actions);
 
-  card.append(title, owner, due, row);
+  card.append(header, meta, row);
 
   return card;
 };
@@ -217,6 +253,7 @@ if (taskForm) {
 if (focusTopButton) {
   focusTopButton.addEventListener('click', () => {
     titleInput.focus();
+    titleInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
   });
 }
 
