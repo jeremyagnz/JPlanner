@@ -160,7 +160,7 @@ nav a {
 .board-grid ul {
   margin: 0;
   padding-left: 1rem;
-  color: #445;
+  color: #444455;
   line-height: 1.5;
   font-size: 0.9rem;
 }
@@ -188,7 +188,7 @@ nav a {
   border-radius: 999px;
   padding: 0.5rem 0.9rem;
   font-weight: 600;
-  color: #445;
+  color: #444455;
 }
 
 .features {
@@ -265,7 +265,7 @@ nav a {
 .pricing-card ul {
   text-align: left;
   line-height: 1.7;
-  color: #445;
+  color: #444455;
 }
 
 .faq {
