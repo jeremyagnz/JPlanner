@@ -93,6 +93,8 @@ const state = {
 
 const reviewStoreKey = 'jplanner-weekly-review';
 const visionStoreKey = 'jplanner-vision-board';
+const WEEKS_PER_MONTH = 4.33;
+const CANVAS_FONT_STACK = '12px Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
 
 init();
 
@@ -162,6 +164,7 @@ function renderAll() {
 }
 
 function renderDaily() {
+  model.day.date = getTodayDate();
   const progress = getDailyCompletion();
 
   document.getElementById('daily').innerHTML = `
@@ -588,19 +591,20 @@ function getDailyCompletion() {
 }
 
 function getWeeklyCompletion() {
-  if (model.day.tasks.length === 0) {
+  const taskCount = model.day.tasks.length;
+  if (taskCount === 0) {
     return 0;
   }
-  const totalUnits = model.weekly.goals.length + model.day.tasks.length;
+  const totalUnits = model.weekly.goals.length + taskCount;
   const completedTaskUnits = model.day.tasks.filter((task) => task.done).length;
-  const completedGoalUnits = Math.round((completedTaskUnits / model.day.tasks.length) * model.weekly.goals.length);
+  const completedGoalUnits = Math.round((completedTaskUnits / taskCount) * model.weekly.goals.length);
   return Math.round(((completedTaskUnits + completedGoalUnits) / totalUnits) * 100);
 }
 
 function generateSmartSuggestions(title, target, current) {
   const pending = target - current;
   const monthly = Math.round(pending / 6);
-  const weekly = Math.round(monthly / 4.33);
+  const weekly = Math.round(monthly / WEEKS_PER_MONTH);
   return [
     `Crear bloque fijo semanal para ${title.toLowerCase()}.`,
     `Dividir el faltante de $${pending.toLocaleString()} en metas mensuales de $${monthly.toLocaleString()}.`,
@@ -655,7 +659,7 @@ function drawRadarChart(canvasId, areas) {
     const textX = centerX + Math.cos(angle) * (radius + 18);
     const textY = centerY + Math.sin(angle) * (radius + 18);
     ctx.fillStyle = '#1b263b';
-    ctx.font = '12px sans-serif';
+    ctx.font = CANVAS_FONT_STACK;
     ctx.fillText(label, textX - 18, textY);
   });
 
@@ -683,6 +687,10 @@ function escapeHtml(text) {
     .replaceAll('>', '&gt;')
     .replaceAll('"', '&quot;')
     .replaceAll("'", '&#39;');
+}
+
+function getTodayDate() {
+  return new Date().toISOString().slice(0, 10);
 }
 
 attachTaskCheckboxEvents();
