@@ -1,0 +1,308 @@
+:root {
+  --bg: #f6f8ff;
+  --text: #191d34;
+  --muted: #5f6b91;
+  --primary: #635bff;
+  --primary-2: #3d76ff;
+  --card: #ffffff;
+  --border: #e8ecfb;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  background: linear-gradient(180deg, #fff, var(--bg));
+  color: var(--text);
+}
+
+.topbar,
+.hero,
+.logos,
+.features,
+.demo,
+.pricing,
+.faq,
+footer {
+  width: min(1120px, 92%);
+  margin: 0 auto;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 0;
+}
+
+.brand {
+  color: var(--text);
+  font-weight: 800;
+  text-decoration: none;
+  font-size: 1.2rem;
+}
+
+nav {
+  display: flex;
+  gap: 1.25rem;
+}
+
+nav a {
+  text-decoration: none;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.btn {
+  border: none;
+  border-radius: 10px;
+  padding: 0.7rem 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn.primary {
+  background: linear-gradient(120deg, var(--primary), var(--primary-2));
+  color: #fff;
+}
+
+.btn.ghost {
+  background: #eef1ff;
+  color: var(--primary);
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  padding: 3rem 0 2rem;
+}
+
+.badge {
+  display: inline-block;
+  margin: 0;
+  padding: 0.35rem 0.75rem;
+  background: #ecebff;
+  color: var(--primary);
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.82rem;
+}
+
+.hero h1 {
+  font-size: clamp(2rem, 5vw, 3.3rem);
+  margin: 1rem 0;
+}
+
+.hero p {
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.cta-form {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 1.3rem;
+}
+
+.cta-form input {
+  flex: 1;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 0.75rem 0.85rem;
+  font: inherit;
+}
+
+.hero-board {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 1rem;
+  box-shadow: 0 18px 45px rgba(62, 71, 104, 0.12);
+}
+
+.board-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 700;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #22c55e;
+}
+
+.board-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.9rem;
+  margin-top: 1rem;
+}
+
+.board-grid article {
+  background: #f9faff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 0.75rem;
+}
+
+.board-grid h3 {
+  margin: 0.2rem 0 0.7rem;
+  font-size: 0.9rem;
+}
+
+.board-grid ul {
+  margin: 0;
+  padding-left: 1rem;
+  color: #445;
+  line-height: 1.5;
+  font-size: 0.9rem;
+}
+
+.logos {
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.logos p {
+  color: var(--muted);
+  margin-bottom: 1rem;
+}
+
+.logos div {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.logos span {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.5rem 0.9rem;
+  font-weight: 600;
+  color: #445;
+}
+
+.features {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.features article,
+.demo,
+.pricing-card,
+.faq details {
+  border: 1px solid var(--border);
+  background: #fff;
+  border-radius: 16px;
+}
+
+.features article {
+  padding: 1rem;
+}
+
+.features h2 {
+  font-size: 1.1rem;
+}
+
+.features p,
+.demo p,
+.faq p {
+  color: var(--muted);
+}
+
+.demo {
+  margin-top: 2rem;
+  padding: 1.2rem;
+}
+
+.progress-list {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.task-row {
+  display: grid;
+  grid-template-columns: 1fr 80px;
+  gap: 0.8rem;
+  align-items: center;
+}
+
+.bar {
+  width: 100%;
+  background: #edf0ff;
+  border-radius: 999px;
+  overflow: hidden;
+  height: 11px;
+}
+
+.bar span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(120deg, #00b3ff, #635bff);
+}
+
+.pricing {
+  text-align: center;
+  padding: 2rem 0;
+}
+
+.pricing-card {
+  width: min(420px, 100%);
+  margin: 0.7rem auto;
+  padding: 1.2rem;
+}
+
+.pricing-card ul {
+  text-align: left;
+  line-height: 1.7;
+  color: #445;
+}
+
+.faq {
+  padding: 0 0 2rem;
+}
+
+.faq details {
+  margin: 0.7rem 0;
+  padding: 0.9rem 1rem;
+}
+
+summary {
+  font-weight: 700;
+  cursor: pointer;
+}
+
+footer {
+  text-align: center;
+  color: var(--muted);
+  padding: 1rem 0 2rem;
+}
+
+@media (max-width: 960px) {
+  nav {
+    display: none;
+  }
+
+  .hero,
+  .features {
+    grid-template-columns: 1fr;
+  }
+
+  .board-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cta-form {
+    flex-direction: column;
+  }
+}
