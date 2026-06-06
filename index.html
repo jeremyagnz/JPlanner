@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>JPlanner | Sistema de manejo de tareas</title>
+    <title>JPlanner | Gestión de tareas para equipos</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -13,26 +13,53 @@
     <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
+    <div class="announcement">Nueva versión Pro: tableros más rápidos, más claros y listos para escalar.</div>
+
     <header class="topbar">
       <div>
-        <p class="eyebrow">JPlanner Workspace</p>
-        <h1>Sistema de manejo de tareas</h1>
+        <p class="eyebrow">JPlanner for Teams</p>
+        <h1>Gestiona tareas como un servicio profesional</h1>
+        <p class="subtitle">
+          Organiza prioridades, asigna responsables y mantiene visibilidad total del progreso.
+        </p>
       </div>
-      <button class="btn primary" type="button" id="newTaskTop">Nueva tarea</button>
+      <div class="top-actions">
+        <button class="btn ghost" type="button">Ver demo</button>
+        <button class="btn primary" type="button" id="newTaskTop">Nueva tarea</button>
+      </div>
     </header>
+
+    <section class="kpi-strip" aria-label="Métricas del tablero">
+      <article>
+        <p>Tareas totales</p>
+        <strong id="totalCountKpi">0</strong>
+      </article>
+      <article>
+        <p>Productividad semanal</p>
+        <strong>+18%</strong>
+      </article>
+      <article>
+        <p>Tiempo medio de cierre</p>
+        <strong>2.4 días</strong>
+      </article>
+    </section>
 
     <main class="layout">
       <aside class="panel">
-        <h2>Crear tarea</h2>
+        <div class="panel-head">
+          <h2>Crear tarea</h2>
+          <span class="panel-tag">Workflow</span>
+        </div>
+
         <form id="taskForm" class="task-form">
           <label>
             Nombre
-            <input id="taskTitle" name="title" type="text" required maxlength="80" />
+            <input id="taskTitle" name="title" type="text" required maxlength="80" placeholder="Ej: Actualizar roadmap Q3" />
           </label>
 
           <label>
             Responsable
-            <input id="taskOwner" name="owner" type="text" required maxlength="40" />
+            <input id="taskOwner" name="owner" type="text" required maxlength="40" placeholder="Ej: Carla" />
           </label>
 
           <label>
@@ -54,7 +81,7 @@
         </form>
 
         <section class="summary" aria-live="polite">
-          <h3>Resumen</h3>
+          <h3>Resumen en tiempo real</h3>
           <p>Total: <strong id="totalCount">0</strong></p>
           <p>Pendiente: <strong id="todoCount">0</strong></p>
           <p>En progreso: <strong id="doingCount">0</strong></p>

@@ -5,6 +5,7 @@ const dueInput = document.getElementById('taskDue');
 const priorityInput = document.getElementById('taskPriority');
 const focusTopButton = document.getElementById('newTaskTop');
 const formFeedback = document.getElementById('formFeedback');
+const kpiTotal = document.getElementById('totalCountKpi');
 
 const lists = {
   todo: document.getElementById('todoList'),
@@ -75,6 +76,12 @@ const nextStatus = (status) => {
   return statuses[nextIndex];
 };
 
+const statusLabels = {
+  todo: 'Pendiente',
+  doing: 'En progreso',
+  done: 'Completado'
+};
+
 const createTaskCard = (task) => {
   const card = document.createElement('article');
   card.className = 'task-card';
@@ -104,7 +111,8 @@ const createTaskCard = (task) => {
   const moveButton = document.createElement('button');
   moveButton.className = 'btn secondary';
   moveButton.type = 'button';
-  moveButton.textContent = 'Mover';
+  const next = nextStatus(task.status);
+  moveButton.textContent = `Mover a ${statusLabels[next]}`;
   moveButton.addEventListener('click', () => {
     task.status = nextStatus(task.status);
     renderBoard();
@@ -139,6 +147,10 @@ const updateSummary = () => {
   counters.todoBadge.textContent = String(todoCount);
   counters.doingBadge.textContent = String(doingCount);
   counters.doneBadge.textContent = String(doneCount);
+
+  if (kpiTotal) {
+    kpiTotal.textContent = String(state.tasks.length);
+  }
 };
 
 const renderColumn = (statusKey) => {
