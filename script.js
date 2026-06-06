@@ -11,13 +11,24 @@ if (list) {
   tasks.forEach((task) => {
     const row = document.createElement('div');
     row.className = 'task-row';
-    row.innerHTML = `
-      <div>
-        <strong>${task.title}</strong>
-        <div class="bar"><span style="width: ${task.progress}%"></span></div>
-      </div>
-      <span>${task.progress}%</span>
-    `;
+
+    const left = document.createElement('div');
+    const title = document.createElement('strong');
+    title.textContent = task.title;
+
+    const bar = document.createElement('div');
+    bar.className = 'bar';
+
+    const fill = document.createElement('span');
+    fill.style.width = `${task.progress}%`;
+
+    bar.appendChild(fill);
+    left.append(title, bar);
+
+    const percent = document.createElement('span');
+    percent.textContent = `${task.progress}%`;
+
+    row.append(left, percent);
     list.appendChild(row);
   });
 }
